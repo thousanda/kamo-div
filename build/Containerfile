@@ -1,0 +1,9 @@
+FROM golang:1.22 as builder
+WORKDIR /app
+COPY . .
+RUN GOOS=linux GOARCH=amd64 go build -o /app/main ./main.go
+
+FROM debian:stable-slim as runner
+WORKDIR /app
+COPY --from=builder /app/main /app/main
+CMD ["/app/main"]
