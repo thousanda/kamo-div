@@ -22,10 +22,14 @@ jobs:
 
     - name: Push to GitLab
       env:
-        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # GitHub Secretsに設定したプロジェクトアクセストークンのキー
+        # GitHub Actions secrets
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # GitLabのプロジェクトアクセストークン
+        # GitHub Actions variables
+        USER_EMAIL: ${{ vars.USER_EMAIL }}  # Gitのメールアドレス
+        USER_NAME: ${{ vars.USER_NAME }}  # Gitの名前
       run: |
-        git config --global user.email ${{ vars.USER_EMAIL }}
-        git config --global user.name ${{ vars.USER_NAME }}
+        git config --global user.email ${USER_EMAIL}
+        git config --global user.name ${USER_NAME}
         # GitLabのリポジトリをリモートリポジトリとして追加
         # リポジトリ名はGitHubのリポジトリ名と同じの想定
         git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/${GITHUB_REPOSITORY}.git
@@ -39,7 +43,8 @@ jobs:
         git push gitlab main:github/main
     - name: Create Merge Request on GitLab
       env:
-        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        # GitHub Actions secrets
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # 同上
       run: |
         # GitLabで `github/main` ブランチから `main` ブランチにMerge Requestを作る
         # リポジトリ名の `/` は `%2F` にエンコードする必要がある
