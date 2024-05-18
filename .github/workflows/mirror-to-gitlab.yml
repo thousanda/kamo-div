@@ -1,0 +1,58 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get latest commit information
+      run: |
+        echo "LATEST_COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "LATEST_GIT_LOG=$(git log --oneline main | head -n 1)" >> $GITHUB_ENV
+
+    - name: Push to GitLab
+      env:
+        # GitHub Actions secrets
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # GitLabのプロジェクトアクセストークン
+        # GitHub Actions variables
+        USER_EMAIL: ${{ vars.USER_EMAIL }}  # Gitのメールアドレス
+        USER_NAME: ${{ vars.USER_NAME }}  # Gitの名前
+      run: |
+        git config --global user.email ${USER_EMAIL}
+        git config --global user.name ${USER_NAME}
+        # GitLabのリポジトリをリモートリポジトリとして追加
+        # リポジトリ名はGitHubのリポジトリ名と同じの想定
+        git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/${GITHUB_REPOSITORY}.git
+        git remote -v
+        echo "$git fetch gitlab --tags"
+        git fetch gitlab --tags
+        echo "$ git log --oneline main | head -n 10"
+        git log --oneline main | head -n 10
+        # GitLabの `github/main` ブランチにpushする
+        echo "$ git push gitlab main:github/main"
+        git push gitlab main:github/main
+    - name: Create Merge Request on GitLab
+      env:
+        # GitHub Actions secrets
+        GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}  # 同上
+      run: |
+        # GitLabで `github/main` ブランチから `main` ブランチにMerge Requestを作る
+        # リポジトリ名の `/` は `%2F` にエンコードする必要がある
+        curl --request POST \
+          --url "https://gitlab.com/api/v4/projects/${GITHUB_REPOSITORY/\//%2F}/merge_requests" \
+          --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+          --form "source_branch=github/main" \
+          --form "target_branch=main" \
+          --form "title=Changes from Upstream GitHub: ${LATEST_COMMIT_HASH}" \
+          --form "description=${LATEST_GIT_LOG}" \
+          --form "remove_source_branch=false"
