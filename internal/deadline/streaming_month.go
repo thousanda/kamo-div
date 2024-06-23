@@ -54,3 +54,10 @@ func (sm StreamingMonth) String() string {
 func (sm StreamingMonth) Deadline() time.Time {
 	return time.Time{}
 }
+
+// firstTuesday 放送月の第一火曜日を計算して返す
+// 例) 2024-07-02 00:00:00
+// 締め切りの計算に使う
+func (sm StreamingMonth) firstTuesday() time.Time {
+	return time.Time{}
+}
