@@ -17,3 +17,11 @@ func NewStreamingMonth(y Year, m Month) (StreamingMonth, error) {
 		month: m,
 	}, nil
 }
+
+func (sm StreamingMonth) Year() Year {
+	return sm.year
+}
+
+func (sm StreamingMonth) Month() Month {
+	return sm.month
+}
