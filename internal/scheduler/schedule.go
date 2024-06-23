@@ -19,3 +19,10 @@ type NotificationSchedule struct {
 	// AllowedDelay 指定時刻からどれだけの遅れまで許容するか
 	AllowedDelay time.Duration
 }
+
+func (s NotificationSchedule) Equal(other NotificationSchedule) bool {
+	return s.DaysBefore == other.DaysBefore &&
+		s.Time == other.Time &&
+		s.Loc.String() == other.Loc.String() &&
+		s.AllowedDelay == other.AllowedDelay
+}
