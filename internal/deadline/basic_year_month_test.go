@@ -4,98 +4,52 @@ import "testing"
 
 func TestNewYear(t *testing.T) {
 	t.Run("指定した年のYearが作成できる", func(t *testing.T) {
+		// 入力を用意
 		input := 2021
 
-		y := NewYear(input)
+		// テスト対象を実行
+		y, err := NewYear(input)
 
-		if !y.isValid {
+		// 結果を検証
+		if err != nil {
 			t.Errorf("意図せずInvalidなYearが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", y.isValid)
+				"error: %v", err)
 		}
 
-		if y.year != input {
+		if int(y) != input {
 			t.Errorf("指定した年のYearが作成できませんでした。\n"+
-				"got : %v\n"+
-				"want: %v", y, input)
+				"got : %d\n"+
+				"want: %d", y, input)
 		}
 	})
 
 	t.Run("番組開始が2021年なので、それより前の年を持ったYearは作成できない", func(t *testing.T) {
+		// 入力を用意
 		input := 2020
 
-		y := NewYear(input)
+		// テスト対象を実行
+		_, e := NewYear(input)
 
-		if y.isValid {
-			t.Errorf("番組開始より前の年を持つYearが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: false", y.isValid)
+		// 結果を検証
+		if e == nil {
+			t.Errorf("番組開始より前の年を持つYearを作成しようとしたのにerrが返りませんでした。")
 		}
 	})
 }
 
 func TestYear_Value(t *testing.T) {
 	t.Run("YearのValueメソッドが正しい値を返す", func(t *testing.T) {
+		// 入力を用意
 		input := 2021
 
-		y := NewYear(input)
+		// テスト対象を実行
+		y := Year(input)
 
+		// 結果を検証
 		if y.Value() != input {
 			t.Errorf("YearのValue()メソッドが正しい値を返しませんでした。\n"+
 				"got : %v\n"+
 				"want: %v", y.Value(), input)
-		}
-	})
-}
-
-func TestYear_IsValid(t *testing.T) {
-	t.Run("正常なYearのIsValidメソッド()がtrueを返す", func(t *testing.T) {
-		input := 2021
-
-		y := NewYear(input)
-
-		if !y.IsValid() {
-			t.Errorf("2021年のYearは正常なのにIsValid()メソッドがfalseを返しました。\n"+
-				"got : %v\n"+
-				"want: %v", y.IsValid(), true)
-		}
-	})
-
-	t.Run("異常なYearのIsValidメソッド()がfalseを返す", func(t *testing.T) {
-		input := 2020
-
-		y := NewYear(input)
-
-		if y.IsValid() {
-			t.Errorf("2020年のYearは異常なのにIsValid()メソッドがtrueを返しました。\n"+
-				"got : %v\n"+
-				"want: %v", y.IsValid(), false)
-		}
-	})
-}
-
-func TestYear_String(t *testing.T) {
-	t.Run("正常なYearのString()メソッドが正しい値を返す", func(t *testing.T) {
-		input := 2021
-
-		y := NewYear(input)
-
-		if y.String() != "2021" {
-			t.Errorf("正常な年である2021年のYearのString()メソッドが '2021' を返しませんでした。\n"+
-				"got : %v\n"+
-				"want: %v", y.String(), "2021")
-		}
-	})
-
-	t.Run("異常なYearのString()メソッドが正しい値を返す", func(t *testing.T) {
-		input := 2020
-
-		y := NewYear(input)
-
-		if y.String() != "Invalid Year" {
-			t.Errorf("異常な年である2020年のYearのString()メソッドが 'Invalid Year' 以外の文字列を返しました。\n"+
-				"got : %v\n"+
-				"want: %v", y.String(), "Invalid Year")
 		}
 	})
 }

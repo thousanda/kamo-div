@@ -2,38 +2,20 @@ package deadline
 
 import "fmt"
 
-// Year 年を表す構造体
+// Year 年を表すもの
 // 番組の開始が2021年なので、それ以降のみを表現できる
-type Year struct {
-	year    int
-	isValid bool
-}
+// 必ずNewYear()を使って作成しましょう
+type Year int
 
-func NewYear(y int) Year {
+func NewYear(y int) (Year, error) {
 	if y < 2021 {
-		return Year{
-			isValid: false,
-		}
+		return Year(0), fmt.Errorf("year must be greater than or equal to 2021; got %d", y)
 	}
-	return Year{
-		year:    y,
-		isValid: true,
-	}
+	return Year(y), nil
 }
 
 func (y Year) Value() int {
-	return y.year
-}
-
-func (y Year) IsValid() bool {
-	return y.isValid
-}
-
-func (y Year) String() string {
-	if !y.IsValid() {
-		return fmt.Sprintf("Invalid Year")
-	}
-	return fmt.Sprintf("%d", y.Value())
+	return int(y)
 }
 
 // Month 月を表す構造体
