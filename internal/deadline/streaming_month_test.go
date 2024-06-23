@@ -103,6 +103,29 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("2021年4月より前の年月を持つStreamingMonthを作成しようとしたのにerrが返りませんでした。")
 		}
 	})
+
+	t.Run("time.Locationがnilの場合はStreamingMonthを作成できない", func(t *testing.T) {
+		// 入力を用意
+		y, err := NewYear(2021)
+		if err != nil {
+			t.Errorf("入力のYearを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		m, err := NewMonth(4)
+		if err != nil {
+			t.Errorf("入力のMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		loc := (*time.Location)(nil)
+
+		// テスト対象の関数を実行
+		_, err = NewStreamingMonth(y, m, loc)
+
+		// 結果を検証
+		if err == nil {
+			t.Errorf("nilのtime.Locationを与えてStreamingMonthを作成しようとしたのにerrが返りませんでした。")
+		}
+	})
 }
 
 func TestStreamingMonth_Year(t *testing.T) {
