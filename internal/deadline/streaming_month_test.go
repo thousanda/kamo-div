@@ -1,6 +1,9 @@
 package deadline
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestNewStreamingMonth(t *testing.T) {
 	t.Run("指定した年月のStreamingMonthが作成できる", func(t *testing.T) {
@@ -15,9 +18,14 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("入力のMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("入力のtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
 
 		// テスト対象の関数を実行
-		sm, err := NewStreamingMonth(y, m)
+		sm, err := NewStreamingMonth(y, m, loc)
 
 		// 結果を検証
 		if err != nil {
@@ -33,6 +41,12 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("StreamingMonthのmonthが指定したMonthと異なります。\n"+
 				"got : %d\n"+
 				"want: %d", sm.month, m)
+		}
+		if sm.loc != loc {
+			t.Errorf("StreamingMonthのlocが指定したtime.Locationと異なります。\n"+
+				"got : %v\n"+
+				"want: %v", sm.loc, loc)
+
 		}
 	})
 
@@ -50,9 +64,14 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("入力のMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("入力のtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
 
 		// テスト対象の関数を実行
-		_, e := NewStreamingMonth(y, m)
+		_, e := NewStreamingMonth(y, m, loc)
 
 		// 結果を検証
 		if e == nil {
@@ -74,7 +93,12 @@ func TestStreamingMonth_Year(t *testing.T) {
 			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
-		sm, err := NewStreamingMonth(y, m)
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		sm, err := NewStreamingMonth(y, m, loc)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -105,7 +129,12 @@ func TestStreamingMonth_Month(t *testing.T) {
 			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
-		sm, err := NewStreamingMonth(y, m)
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		sm, err := NewStreamingMonth(y, m, loc)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -123,6 +152,42 @@ func TestStreamingMonth_Month(t *testing.T) {
 	})
 }
 
+func TestStreamingMonth_Location(t *testing.T) {
+	t.Run("StreamingMonthのLocation()メソッドが正しい値を返す", func(t *testing.T) {
+		// テスト対象のものを用意
+		y, err := NewYear(2021)
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのYearを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		m, err := NewMonth(4)
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		sm, err := NewStreamingMonth(y, m, loc)
+		if err != nil {
+			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+
+		// テスト対象のメソッドを実行
+		got := sm.Location()
+
+		// 結果を検証
+		if got != loc {
+			t.Errorf("StreamingMonthのLocation()メソッドが正しい値を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", got, loc)
+		}
+	})
+}
+
 func TestStreamingMonth_String(t *testing.T) {
 	t.Run("StreamingMonthのString()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
@@ -136,7 +201,12 @@ func TestStreamingMonth_String(t *testing.T) {
 			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
-		sm, err := NewStreamingMonth(y, m)
+		loc, err := time.LoadLocation("Asia/Tokyo")
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		sm, err := NewStreamingMonth(y, m, loc)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
