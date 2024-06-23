@@ -7,15 +7,14 @@ func TestNewYear(t *testing.T) {
 		// 入力を用意
 		input := 2021
 
-		// テスト対象を実行
+		// テスト対象の関数を実行
 		y, err := NewYear(input)
 
 		// 結果を検証
 		if err != nil {
-			t.Errorf("意図せずInvalidなYearが作成されてしまいました。\n"+
-				"error: %v", err)
+			t.Errorf("正常にYearが作成されるべきなのにerrが返ってきてしまいました。\n"+
+				"err: %v", err)
 		}
-
 		if int(y) != input {
 			t.Errorf("指定した年のYearが作成できませんでした。\n"+
 				"got : %d\n"+
@@ -27,7 +26,7 @@ func TestNewYear(t *testing.T) {
 		// 入力を用意
 		input := 2020
 
-		// テスト対象を実行
+		// テスト対象の関数を実行
 		_, e := NewYear(input)
 
 		// 結果を検証
@@ -39,34 +38,35 @@ func TestNewYear(t *testing.T) {
 
 func TestYear_Value(t *testing.T) {
 	t.Run("YearのValueメソッドが正しい値を返す", func(t *testing.T) {
-		// 入力を用意
-		input := 2021
+		// テスト対象のものを用意
+		y := Year(2021)
 
-		// テスト対象を実行
-		y := Year(input)
+		// テスト対象のメソッドを実行
+		v := y.Value()
 
 		// 結果を検証
-		if y.Value() != input {
+		if v != 2021 {
 			t.Errorf("YearのValue()メソッドが正しい値を返しませんでした。\n"+
 				"got : %v\n"+
-				"want: %v", y.Value(), input)
+				"want: 2021", y.Value())
 		}
 	})
 }
 
 func TestNewMonth(t *testing.T) {
 	t.Run("指定した月のMonthが作成できる (1月)", func(t *testing.T) {
+		// 入力を用意
 		input := 1
 
-		m := NewMonth(input)
+		// テスト対象の関数を実行
+		m, err := NewMonth(input)
 
-		if !m.isValid {
-			t.Errorf("意図せずInvalidなMonthが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", m.isValid)
+		// 結果を検証
+		if err != nil {
+			t.Errorf("正常にMonthが作成されるべきなのにerrが返ってきてしまいました。\n"+
+				"error: %v", err)
 		}
-
-		if m.month != input {
+		if int(m) != input {
 			t.Errorf("指定した月のMonthが作成できませんでした。\n"+
 				"got : %v\n"+
 				"want: %v", m, input)
@@ -74,17 +74,18 @@ func TestNewMonth(t *testing.T) {
 	})
 
 	t.Run("指定した月のMonthが作成できる (12月)", func(t *testing.T) {
+		// 入力を用意
 		input := 12
 
-		m := NewMonth(input)
+		// テスト対象の関数を実行
+		m, err := NewMonth(input)
 
-		if !m.isValid {
-			t.Errorf("意図せずInvalidなMonthが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", m.isValid)
+		// 結果を検証
+		if err != nil {
+			t.Errorf("正常にMonthが作成されるべきなのにerrが返ってきてしまいました。\n"+
+				"error: %v", err)
 		}
-
-		if m.month != input {
+		if int(m) != input {
 			t.Errorf("指定した月のMonthが作成できませんでした。\n"+
 				"got : %v\n"+
 				"want: %v", m, input)
@@ -92,104 +93,57 @@ func TestNewMonth(t *testing.T) {
 	})
 
 	t.Run("0月は存在しない", func(t *testing.T) {
+		// 入力を用意
 		input := 0
 
-		m := NewMonth(input)
+		// テスト対象の関数を実行
+		_, err := NewMonth(input)
 
-		if m.isValid {
-			t.Errorf("月の値として0を入力したのにValidなMonthが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", m.isValid)
+		// 結果を検証
+		if err == nil {
+			t.Errorf("0月を作ろうとしたのにerrが返ってきませんでした。\n"+
+				"error: %v", err)
 		}
 	})
 
-	t.Run("負の月を持つMonthは存在しない", func(t *testing.T) {
-		input := 0
+	t.Run("-1月は存在しない", func(t *testing.T) {
+		// 入力を用意
+		input := -1
 
-		m := NewMonth(input)
+		// テスト対象の関数を実行
+		_, err := NewMonth(input)
 
-		if m.isValid {
-			t.Errorf("月の値として負の値を入力したのにValidなMonthが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", m.isValid)
+		// 結果を検証
+		if err == nil {
+			t.Errorf("-1月を作ろうとしたのにerrが返ってきませんでした。\n"+
+				"error: %v", err)
 		}
 	})
 
-	t.Run("13月以上は存在しない", func(t *testing.T) {
+	t.Run("13月は存在しない", func(t *testing.T) {
+		// 入力を用意
 		input := 13
 
-		m := NewMonth(input)
+		// テスト対象の関数を実行
+		_, err := NewMonth(input)
 
-		if m.isValid {
-			t.Errorf("月の値として13を入力したのにValidなMonthが作成されてしまいました。\n"+
-				"got : %v\n"+
-				"want: true", m.isValid)
+		// 結果を検証
+		if err == nil {
+			t.Errorf("13月を作ろうとしたのにerrが返ってきませんでした。\n"+
+				"error: %v", err)
 		}
 	})
 }
 
 func TestMonth_Value(t *testing.T) {
 	t.Run("MonthのValueメソッドが正しい値を返す", func(t *testing.T) {
-		input := 4
+		// テスト対象のものを用意
+		m := Month(12)
 
-		m := NewMonth(input)
-
-		if m.Value() != input {
+		if m.Value() != 12 {
 			t.Errorf("MonthのValue()メソッドが正しい値を返しませんでした。\n"+
 				"got : %v\n"+
-				"want: %v", m.Value(), input)
-		}
-	})
-}
-
-func TestMonth_IsValid(t *testing.T) {
-	t.Run("正常なMonthのIsValidメソッド()がtrueを返す", func(t *testing.T) {
-		input := 12
-
-		m := NewMonth(input)
-
-		if !m.IsValid() {
-			t.Errorf("12月のMonthは正常なのにIsValid()メソッドがfalseを返しました。\n"+
-				"got : %v\n"+
-				"want: %v", m.IsValid(), true)
-		}
-	})
-
-	t.Run("異常なMonthのIsValidメソッド()がfalseを返す", func(t *testing.T) {
-		input := 0
-
-		m := NewMonth(input)
-
-		if m.IsValid() {
-			t.Errorf("0月のMonthは異常なのにIsValid()メソッドがtrueを返しました。\n"+
-				"got : %v\n"+
-				"want: %v", m.IsValid(), false)
-		}
-	})
-}
-
-func TestMonth_String(t *testing.T) {
-	t.Run("正常なMonthのString()メソッドが正しい値を返す", func(t *testing.T) {
-		input := 12
-
-		m := NewMonth(input)
-
-		if m.String() != "12" {
-			t.Errorf("正常な月である12月のMonthのString()メソッドが '12' を返しませんでした。\n"+
-				"got : %v\n"+
-				"want: %v", m.String(), "12")
-		}
-	})
-
-	t.Run("異常なMonthのString()メソッドが正しい値を返す", func(t *testing.T) {
-		input := 0
-
-		m := NewMonth(input)
-
-		if m.String() != "Invalid Month" {
-			t.Errorf("異常な月である0月のMonthのString()メソッドが 'Invalid Month' 以外の文字列を返しました。\n"+
-				"got : %v\n"+
-				"want: %v", m.String(), "Invalid Month")
+				"want: 12", m.Value())
 		}
 	})
 }

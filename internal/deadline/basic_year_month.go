@@ -18,36 +18,17 @@ func (y Year) Value() int {
 	return int(y)
 }
 
-// Month 月を表す構造体
+// Month 月を表すもの
 // 1月から12月までを表現できる
-type Month struct {
-	month   int
-	isValid bool
-}
+type Month int
 
-func NewMonth(m int) Month {
+func NewMonth(m int) (Month, error) {
 	if m < 1 || 12 < m {
-		return Month{
-			isValid: false,
-		}
+		return Month(0), fmt.Errorf("month must be between 1 and 12; got %d", m)
 	}
-	return Month{
-		month:   m,
-		isValid: true,
-	}
+	return Month(m), nil
 }
 
 func (m Month) Value() int {
-	return m.month
-}
-
-func (m Month) IsValid() bool {
-	return m.isValid
-}
-
-func (m Month) String() string {
-	if !m.IsValid() {
-		return fmt.Sprintf("Invalid Month")
-	}
-	return fmt.Sprintf("%d", m.Value())
+	return int(m)
 }
