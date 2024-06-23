@@ -29,7 +29,3 @@ func (sm StreamingMonth) Month() Month {
 func (sm StreamingMonth) String() string {
 	return fmt.Sprintf("%d-%02d", sm.year, sm.month)
 }
-
-func (sm StreamingMonth) IsEqualTo(other StreamingMonth) bool {
-	return sm.year == other.year && sm.month == other.month
-}
