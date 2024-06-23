@@ -59,5 +59,15 @@ func (sm StreamingMonth) Deadline() time.Time {
 // 例) 2024-07-02 00:00:00
 // 締め切りの計算に使う
 func (sm StreamingMonth) firstTuesday() time.Time {
-	return time.Time{}
+	// まずは放送月の1日を取得
+	firstDay := time.Date(sm.Year().Value(), time.Month(sm.Month()),
+		1, 0, 0, 0, 0, sm.Location())
+	// 1日の曜日を取得
+	// 0: 日曜, 1: 月曜, 2: 火曜, ..., 6: 土曜
+	dayOfWeekOfFirstDay := firstDay.Weekday()
+	// 何日進めば火曜になるかを計算
+	offset := (7 + 2 - int(dayOfWeekOfFirstDay)) % 7
+
+	return time.Date(sm.Year().Value(), time.Month(sm.Month()),
+		1+offset, 0, 0, 0, 0, sm.Location())
 }

@@ -45,22 +45,7 @@ func TestStreamingMonth_Deadline(t *testing.T) {
 func TestStreamingMonth_FirstTuesday(t *testing.T) {
 	t.Run("放送月の第一火曜日を計算して返す", func(t *testing.T) {
 		// テスト対象のものを用意
-		y, err := NewYear(2024)
-		if err != nil {
-			t.Errorf("StreamingMonthを作るためのYearを用意しようとした時点でerrが返ってきてしまいました。\n"+
-				"err: %v", err)
-		}
-		m, err := NewMonth(7)
-		if err != nil {
-			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
-				"err: %v", err)
-		}
-		loc, err := time.LoadLocation("Asia/Tokyo")
-		if err != nil {
-			t.Errorf("StreamingMonthを作るためのtime.LoadLocation()がerrを返しました。\n"+
-				"err: %v", err)
-		}
-		sm, err := NewStreamingMonth(y, m, loc)
+		sm, err := createStreamingMonth(2024, 7)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -70,7 +55,8 @@ func TestStreamingMonth_FirstTuesday(t *testing.T) {
 		d := sm.firstTuesday()
 
 		// 結果を検証
-		want := time.Date(2024, 7, 2, 0, 0, 0, 0, time.UTC)
+		loc, _ := time.LoadLocation("Asia/Tokyo")
+		want := time.Date(2024, 7, 2, 0, 0, 0, 0, loc)
 		if !d.Equal(want) {
 			t.Errorf("2024年7月の第一火曜日は7月2日の0:00:00のはずですが、異なる時刻が計算されました。\n"+
 				"got : %v\n"+
