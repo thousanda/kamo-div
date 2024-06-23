@@ -37,7 +37,7 @@ func TestNewYear(t *testing.T) {
 }
 
 func TestYear_Value(t *testing.T) {
-	t.Run("YearのValueメソッドが正しい値を返す", func(t *testing.T) {
+	t.Run("YearのValue()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
 		y := Year(2021)
 
@@ -136,7 +136,7 @@ func TestNewMonth(t *testing.T) {
 }
 
 func TestMonth_Value(t *testing.T) {
-	t.Run("MonthのValueメソッドが正しい値を返す", func(t *testing.T) {
+	t.Run("MonthのValue()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
 		m := Month(12)
 
