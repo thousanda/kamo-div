@@ -52,7 +52,12 @@ func (sm StreamingMonth) String() string {
 // 放送月の第一火曜日の13日前にあたる日の23:59:59
 // つまり、締め切り日は水曜日
 func (sm StreamingMonth) Deadline() time.Time {
-	return time.Time{}
+	firstTuesday := sm.firstTuesday()
+	deadlineDate := firstTuesday.AddDate(0, 0, -13)
+	deadline := time.Date(deadlineDate.Year(), deadlineDate.Month(), deadlineDate.Day(),
+		23, 59, 59, 0, sm.Location())
+
+	return deadline
 }
 
 // firstTuesday 放送月の第一火曜日を計算して返す
@@ -67,7 +72,8 @@ func (sm StreamingMonth) firstTuesday() time.Time {
 	dayOfWeekOfFirstDay := firstDay.Weekday()
 	// 何日進めば火曜になるかを計算
 	offset := (7 + 2 - int(dayOfWeekOfFirstDay)) % 7
+	// offset日だけ進めると第一火曜日になる
+	firstTuesday := firstDay.AddDate(0, 0, offset)
 
-	return time.Date(sm.Year().Value(), time.Month(sm.Month()),
-		1+offset, 0, 0, 0, 0, sm.Location())
+	return firstTuesday
 }
