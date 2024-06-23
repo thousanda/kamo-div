@@ -1,16 +1,19 @@
 package deadline
 
-type Year int
-type Month int
+import "fmt"
 
-type StreamingMonth struct{
-	year Year
+type StreamingMonth struct {
+	year  Year
 	month Month
 }
 
-func NewStreamingMonth(y Year, m Month) StreamingMonth {
-	return StreamingMonth{
-		year: y,
-		month: m,
+func NewStreamingMonth(y Year, m Month) (StreamingMonth, error) {
+	if y == 2021 && m < 4 {
+		return StreamingMonth{},
+			fmt.Errorf("year and month must be greater than or equal to 2021-04; got %d-%d", y, m)
 	}
+	return StreamingMonth{
+		year:  y,
+		month: m,
+	}, nil
 }
