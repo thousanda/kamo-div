@@ -18,10 +18,11 @@ jobs:
         with:
           go-version: '^1.22'
 
-      - name: Tidy and verify module dependencies
-        run: |
-          go mod tidy
-          go mod verify
+#      # 標準ライブラリのみでビルドできるので今はまだ不要
+#      - name: Tidy and verify module dependencies
+#        run: |
+#          go mod tidy
+#          go mod verify
 
       - name: Test
         run: go test -v ./internal/...
