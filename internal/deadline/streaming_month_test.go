@@ -7,7 +7,7 @@ import (
 )
 
 // createTestStreamingMonth StreamingMonthのメソッドをテストしたいときのために、StreamingMonthの作成をすこし簡略化するヘルパー関数
-func createTestStreamingMonth(y int, m int) (StreamingMonth, error) {
+func createTestStreamingMonth(y int, m int, loc *time.Location) (StreamingMonth, error) {
 	year, err := NewYear(y)
 	if err != nil {
 		return StreamingMonth{},
@@ -18,12 +18,6 @@ func createTestStreamingMonth(y int, m int) (StreamingMonth, error) {
 	if err != nil {
 		return StreamingMonth{},
 			fmt.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
-				"err: %v", err)
-	}
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return StreamingMonth{},
-			fmt.Errorf("StreamingMonthを作るためのtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 	}
 
@@ -43,14 +37,9 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("入力のMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
-		loc, err := time.LoadLocation("Asia/Tokyo")
-		if err != nil {
-			t.Errorf("入力のtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
-				"err: %v", err)
-		}
 
 		// テスト対象の関数を実行
-		sm, err := NewStreamingMonth(y, m, loc)
+		sm, err := NewStreamingMonth(y, m, time.UTC)
 
 		// 結果を検証
 		if err != nil {
@@ -67,10 +56,10 @@ func TestNewStreamingMonth(t *testing.T) {
 				"got : %d\n"+
 				"want: %d", sm.month, m)
 		}
-		if sm.loc != loc {
+		if sm.loc.String() != time.UTC.String() {
 			t.Errorf("StreamingMonthのlocが指定したtime.Locationと異なります。\n"+
 				"got : %v\n"+
-				"want: %v", sm.loc, loc)
+				"want: %v", sm.loc, time.UTC)
 
 		}
 	})
@@ -89,14 +78,9 @@ func TestNewStreamingMonth(t *testing.T) {
 			t.Errorf("入力のMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
 		}
-		loc, err := time.LoadLocation("Asia/Tokyo")
-		if err != nil {
-			t.Errorf("入力のtime.Locationを用意しようとした時点でerrが返ってきてしまいました。\n"+
-				"err: %v", err)
-		}
 
 		// テスト対象の関数を実行
-		_, e := NewStreamingMonth(y, m, loc)
+		_, e := NewStreamingMonth(y, m, time.UTC)
 
 		// 結果を検証
 		if e == nil {
@@ -131,7 +115,7 @@ func TestNewStreamingMonth(t *testing.T) {
 func TestStreamingMonth_Year(t *testing.T) {
 	t.Run("StreamingMonthのYear()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
-		sm, err := createTestStreamingMonth(2021, 4)
+		sm, err := createTestStreamingMonth(2021, 4, time.UTC)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -153,7 +137,7 @@ func TestStreamingMonth_Year(t *testing.T) {
 func TestStreamingMonth_Month(t *testing.T) {
 	t.Run("StreamingMonthのMonth()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
-		sm, err := createTestStreamingMonth(2021, 4)
+		sm, err := createTestStreamingMonth(2021, 4, time.UTC)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -175,7 +159,7 @@ func TestStreamingMonth_Month(t *testing.T) {
 func TestStreamingMonth_Location(t *testing.T) {
 	t.Run("StreamingMonthのLocation()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
-		sm, err := createTestStreamingMonth(2021, 4)
+		sm, err := createTestStreamingMonth(2021, 4, time.UTC)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
@@ -185,11 +169,10 @@ func TestStreamingMonth_Location(t *testing.T) {
 		got := sm.Location()
 
 		// 結果を検証
-		want, _ := time.LoadLocation("Asia/Tokyo")
-		if got.String() != want.String() {
+		if got.String() != time.UTC.String() {
 			t.Errorf("StreamingMonthのLocation()メソッドが正しい値を返しませんでした。\n"+
 				"got : %v\n"+
-				"want: %v", got, want)
+				"want: %v", got, time.UTC)
 		}
 	})
 }
@@ -197,7 +180,7 @@ func TestStreamingMonth_Location(t *testing.T) {
 func TestStreamingMonth_String(t *testing.T) {
 	t.Run("StreamingMonthのString()メソッドが正しい値を返す", func(t *testing.T) {
 		// テスト対象のものを用意
-		sm, err := createTestStreamingMonth(2021, 4)
+		sm, err := createTestStreamingMonth(2021, 4, time.UTC)
 		if err != nil {
 			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
 				"err: %v", err)
