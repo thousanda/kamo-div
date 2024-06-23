@@ -122,3 +122,35 @@ func TestStreamingMonth_Month(t *testing.T) {
 		}
 	})
 }
+
+func TestStreamingMonth_String(t *testing.T) {
+	t.Run("StreamingMonthのString()メソッドが正しい値を返す", func(t *testing.T) {
+		// テスト対象のものを用意
+		y, err := NewYear(2021)
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのYearを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		m, err := NewMonth(4)
+		if err != nil {
+			t.Errorf("StreamingMonthを作るためのMonthを用意しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+		sm, err := NewStreamingMonth(y, m)
+		if err != nil {
+			t.Errorf("StreamingMonthを作成しようとした時点でerrが返ってきてしまいました。\n"+
+				"err: %v", err)
+		}
+
+		// テスト対象のメソッドを実行
+		got := sm.String()
+
+		// 結果を検証
+		want := "2021-04"
+		if got != want {
+			t.Errorf("StreamingMonthのString()メソッドが正しい値を返しませんでした。\n"+
+				"got : %s\n"+
+				"want: %s", got, want)
+		}
+	})
+}

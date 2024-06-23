@@ -25,3 +25,7 @@ func (sm StreamingMonth) Year() Year {
 func (sm StreamingMonth) Month() Month {
 	return sm.month
 }
+
+func (sm StreamingMonth) String() string {
+	return fmt.Sprintf("%d-%02d", sm.year, sm.month)
+}
