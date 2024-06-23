@@ -2,6 +2,10 @@ package deadline
 
 import "fmt"
 
+// StreamingMonth エピソードが配信される時期を表すもの
+// 例) 2021-04
+// 番組の開始が2021年4月なので、それ以降のみを表現できる
+// 必ずNewStreamingMonth()を使って作成しましょう
 type StreamingMonth struct {
 	year  Year
 	month Month
