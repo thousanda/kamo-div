@@ -51,13 +51,13 @@ func (sm StreamingMonth) String() string {
 // 例) 2024-06-19 23:59:59
 // 放送月の第一火曜日の13日前にあたる日の23:59:59
 // つまり、締め切り日は水曜日
-func (sm StreamingMonth) Deadline() time.Time {
+func (sm StreamingMonth) Deadline() Deadline {
 	firstTuesday := sm.firstTuesday()
 	deadlineDate := firstTuesday.AddDate(0, 0, -13)
-	deadline := time.Date(deadlineDate.Year(), deadlineDate.Month(), deadlineDate.Day(),
+	deadlineTime := time.Date(deadlineDate.Year(), deadlineDate.Month(), deadlineDate.Day(),
 		23, 59, 59, 0, sm.Location())
 
-	return deadline
+	return NewDeadline(deadlineTime)
 }
 
 // firstTuesday 放送月の第一火曜日を計算して返す
