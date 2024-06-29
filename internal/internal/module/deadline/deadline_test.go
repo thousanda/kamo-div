@@ -40,6 +40,25 @@ func TestDeadline_ToTime(t *testing.T) {
 	})
 }
 
+func TestDeadline_ToJapaneseMDWdHMString(t *testing.T) {
+	t.Run("DeadlineのToJapaneseMDWdHMString()メソッドが日本語表記の日時を返す", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 6, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.ToJapaneseMDWdHMString()
+
+		// 結果を検証
+		want := "4月6日 (火) 1:02"
+		if v != want {
+			t.Errorf("DeadlineのToJapaneseMDWdHMString()メソッドが日本語表記の日時を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+}
+
 func TestDeadline_Equal(t *testing.T) {
 	t.Run("DeadlineがEqual()メソッドで同値かどうかを判定できる", func(t *testing.T) {
 		// テスト対象のものを用意
@@ -57,4 +76,119 @@ func TestDeadline_Equal(t *testing.T) {
 				"want: %v", v, want)
 		}
 	})
+}
+
+func TestDeadline_weekdayInShortJapanese(t *testing.T) {
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (日)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 4, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "日"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (月)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 5, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "月"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (火)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 6, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "火"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (水)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 7, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "水"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (木)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 8, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "木"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (金)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 9, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "金"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
+	t.Run("DeadlineのweekdayInShortJapanese()メソッドが曜日の短縮された日本語表記を返す (土)", func(t *testing.T) {
+		// テスト対象のものを用意
+		d := NewDeadline(time.Date(2021, 4, 10, 1, 2, 3, 0, time.UTC))
+
+		// テスト対象のメソッドを実行
+		v := d.weekdayInShortJapanese()
+
+		// 結果を検証
+		want := "土"
+		if v != want {
+			t.Errorf("DeadlineのweekdayInShortJapanese()メソッドが曜日の日本語表記を返しませんでした。\n"+
+				"got : %v\n"+
+				"want: %v", v, want)
+		}
+	})
+
 }
