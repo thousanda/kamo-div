@@ -1,5 +1,7 @@
 package messaging
 
+import "github.com/thousanda/kamo-div/internal/internal/module/reminder"
+
 type Messenger interface {
-	Broadcast() error
+	Broadcast(reminder reminder.Reminder) error
 }
