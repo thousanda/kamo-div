@@ -18,7 +18,7 @@ func TestStreamingMonth_Deadline(t *testing.T) {
 		d := sm.Deadline()
 
 		// 結果を検証
-		want := time.Date(2024, 6, 19, 23, 59, 59, 0, time.UTC)
+		want := NewDeadline(time.Date(2024, 6, 19, 23, 59, 59, 0, time.UTC))
 		if !d.Equal(want) {
 			t.Errorf("2024年7月放送分の締め切りは6月19日の23:59:59のはずですが、異なる時刻が計算されました。\n"+
 				"got : %v\n"+
