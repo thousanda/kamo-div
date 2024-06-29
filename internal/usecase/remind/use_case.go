@@ -9,13 +9,13 @@ import (
 
 type UseCase struct {
 	now                   time.Time
-	reminderMessageWriter reminder.MessageWriter
+	reminderMessageWriter *reminder.MessageWriter
 	messenger             messaging.Messenger
 }
 
 func NewUseCase(
 	now time.Time,
-	w reminder.MessageWriter,
+	w *reminder.MessageWriter,
 	m messaging.Messenger,
 ) *UseCase {
 	return &UseCase{
